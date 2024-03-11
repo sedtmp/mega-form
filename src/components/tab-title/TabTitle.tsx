@@ -11,7 +11,6 @@ export const TabTitle = ({}: TabTitleProps) => {
     const worker = new SharedWorker(new URL("./counter.ts", import.meta.url));
     worker.port.postMessage({ type: "connect" });
     worker.port.onmessage = (e) => {
-      console.log(e.data);
       setTabsCount(e.data.tabsCount);
       setTabNumber(e.data.tabNumber);
     };

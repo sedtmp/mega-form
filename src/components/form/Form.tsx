@@ -50,9 +50,33 @@ export const Form = ({}: FormProps) => {
     append(initGroup(fields.length));
   };
 
+  const handleSubmit = form.handleSubmit((data) => {
+    const sumbitData: FormSchemaFields = {
+      sum: data.groups.reduce(
+        (acc, { products }) =>
+          acc +
+          products.reduce((acc, { count, price }) => acc + count * price, 0),
+        0
+      ),
+      groups: data.groups.map((group) => ({
+        ...group,
+        products: group.products.map((product) => ({
+          ...product,
+          sum: product.count * product.price,
+        })),
+        sum: group.products.reduce(
+          (acc, { count, price }) => acc + count * price,
+          0
+        ),
+      })),
+    };
+
+    console.log(sumbitData);
+  });
+
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit((data) => console.log(data))}>
+      <form onSubmit={handleSubmit}>
         <Stack alignItems="center" spacing="20px">
           <Stack width="100%" maxWidth="800px" spacing="10px">
             {fields.map(({ id }, index) => (
